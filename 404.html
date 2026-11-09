@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>C-PH111 · Physics Revision · Ammar</title>
+<meta name="theme-color" content="#FBF9F5">
+<style>
+:root{
+  --paper:#FBF9F5; --card:#FFFFFF; --ink:#15181D; --muted:#6B7280; --soft:#8A8578;
+  --line:#E6E0D6; --line2:#EFEAE1;
+  --teal:#0B6E5F; --teal-soft:#E7F2EF; --amber:#A65E12; --amber-soft:#FBF0DF;
+  --red:#B3261E; --red-soft:#FBECEA;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;background:var(--paper);color:var(--ink)}
+body{font-family:var(--sans);line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:720px;margin:0 auto;padding:0 18px 100px}
+.hide{display:none!important}
+
+/* top bar */
+.bar{position:sticky;top:0;z-index:20;background:rgba(251,249,245,.94);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line2);margin:0 -18px 18px;padding:12px 18px;display:flex;align-items:center;gap:12px}
+.bar .back{width:36px;height:36px;flex:none;border:1px solid var(--line);background:var(--card);
+  border-radius:11px;font-size:16px;color:var(--ink);cursor:pointer;display:grid;place-items:center;padding:0}
+.bar .back:active{transform:scale(.96)}
+.bar .t{font-size:12px;font-family:var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--soft)}
+.bar .sub{font-size:14px;font-weight:600;letter-spacing:-.01em}
+.bar .sp{flex:1}
+.dots{display:flex;gap:5px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--line);transition:background .2s}
+.dot.on{background:var(--teal)}
+
+/* home */
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--soft)}
+h1{font-size:clamp(30px,8.5vw,42px);line-height:1.03;letter-spacing:-.035em;margin:10px 0 8px;font-weight:800}
+h1 em{font-style:normal;color:var(--teal)}
+.lead{color:var(--muted);font-size:15px;margin:0 0 22px;max-width:46ch}
+.tline{display:flex;align-items:baseline;gap:8px;margin:0 0 10px}
+.tline b{font-size:12px;font-family:var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--soft)}
+
+.card{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--card);
+  border:1px solid var(--line);border-radius:16px;padding:15px 16px;margin-bottom:10px;cursor:pointer;
+  font-family:var(--sans);color:var(--ink);transition:border-color .14s,transform .08s,box-shadow .14s}
+.card:hover{border-color:#CFC8BA;box-shadow:0 2px 10px rgba(0,0,0,.04)}
+.card:active{transform:scale(.995)}
+.card .num{width:38px;height:38px;flex:none;border-radius:11px;background:var(--teal-soft);color:var(--teal);
+  display:grid;place-items:center;font-family:var(--mono);font-size:14px;font-weight:700}
+.card .txt{flex:1;min-width:0}
+.card .ttl{font-size:16px;font-weight:650;letter-spacing:-.015em;display:block}
+.card .ds{font-size:13px;color:var(--muted);display:block;margin-top:1px}
+.card .st{font-family:var(--mono);font-size:11px;color:var(--soft);flex:none;text-align:right;line-height:1.35}
+.card .st.done{color:var(--teal);font-weight:700}
+
+/* topic */
+.lec{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--teal);margin-bottom:6px}
+h2{font-size:clamp(24px,6.6vw,32px);letter-spacing:-.03em;line-height:1.1;margin:0 0 18px;font-weight:800}
+h3{font-size:12px;font-family:var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--soft);
+  margin:26px 0 10px;font-weight:600}
+.sec{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 17px;margin-bottom:12px}
+ul.know{margin:0;padding:0;list-style:none}
+ul.know li{position:relative;padding-left:19px;margin-bottom:9px;font-size:14.5px;line-height:1.55}
+ul.know li:last-child{margin-bottom:0}
+ul.know li::before{content:"";position:absolute;left:0;top:8px;width:7px;height:7px;border-radius:2px;background:var(--teal);opacity:.75}
+.know code,.why code,.ex code{font-family:var(--mono);font-size:.92em;background:var(--teal-soft);color:var(--teal);
+  padding:1px 5px;border-radius:5px;white-space:nowrap}
+
+ol.steps{margin:0;padding:0;list-style:none;counter-reset:s}
+ol.steps li{counter-increment:s;position:relative;padding-left:32px;margin-bottom:11px;font-size:14.5px}
+ol.steps li:last-child{margin-bottom:0}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:1px;width:21px;height:21px;border-radius:7px;
+  background:var(--ink);color:#fff;font-family:var(--mono);font-size:11px;display:grid;place-items:center;font-weight:700}
+.mname{font-size:15px;font-weight:650;margin:0 0 12px;letter-spacing:-.01em}
+
+.fml{font-family:var(--mono);font-size:14px;background:#F6F3EC;border:1px solid var(--line2);
+  border-radius:11px;padding:11px 13px;margin:9px 0;overflow-x:auto;white-space:nowrap}
+.fml b{color:var(--teal)}
+
+.ex{background:var(--amber-soft);border:1px solid #F0DFC4;border-radius:16px;padding:15px 16px;margin-bottom:12px}
+.ex .q{font-size:14px;font-weight:600;margin:0 0 10px}
+.ex .st{font-family:var(--mono);font-size:13px;line-height:1.75;margin:0 0 10px;white-space:pre-wrap}
+.ex .a{border-top:1px solid #EBD9BC;padding-top:10px;font-size:14px;font-weight:650;color:#6B3D05}
+
+/* quiz */
+.quizb{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 17px;margin-bottom:11px}
+.qn{font-family:var(--mono);font-size:11px;color:var(--soft);letter-spacing:.12em;margin-bottom:6px}
+.qq{font-size:15px;font-weight:600;letter-spacing:-.01em;margin:0 0 12px;line-height:1.45}
+.opts{display:grid;gap:7px}
+.opt{text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:11px;padding:11px 13px;
+  font-family:var(--sans);font-size:14px;color:var(--ink);cursor:pointer;transition:border-color .12s,background .12s}
+.opt:hover{border-color:#CFC8BA}
+.opt.good{border-color:var(--teal);background:var(--teal-soft);color:#07463C;font-weight:600}
+.opt.bad{border-color:var(--red);background:var(--red-soft);color:#7A1A15}
+.opt:disabled{cursor:default}
+.numin{display:flex;gap:8px;align-items:center}
+.numin input{flex:1;min-width:0;font-family:var(--mono);font-size:15px;padding:11px 12px;border-radius:11px;
+  border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+.numin input:focus{outline:0;border-color:var(--teal);box-shadow:0 0 0 3px rgba(11,110,95,.1)}
+.numin .u{font-family:var(--mono);font-size:13px;color:var(--soft)}
+.btn{background:var(--ink);color:#fff;border:0;border-radius:11px;padding:11px 16px;font-size:14px;
+  font-weight:600;font-family:var(--sans);cursor:pointer}
+.btn:active{transform:scale(.98)}
+.btn.sm{padding:9px 13px;font-size:13px}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.why{margin:12px 0 0;padding:11px 13px;border-radius:11px;font-size:13.5px;line-height:1.6}
+.why.ok{background:var(--teal-soft);color:#07463C}
+.why.no{background:var(--red-soft);color:#7A1A15}
+.why b{font-weight:700}
+
+.foot{display:flex;gap:9px;margin-top:16px}
+.foot .btn{flex:1}
+.donebox{background:var(--teal-soft);border:1px solid #C9E3DD;border-radius:16px;padding:16px;margin-top:6px;text-align:center}
+.donebox p{margin:0 0 12px;font-size:14.5px;color:#07463C;font-weight:600}
+.note{font-size:12.5px;color:var(--soft);text-align:center;margin-top:26px;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="bar" id="bar">
+    <button class="back hide" id="back">&#8592;</button>
+    <div>
+      <div class="t" id="barTop">C-PH111</div>
+      <div class="sub" id="barSub">Revision</div>
+    </div>
+    <div class="sp"></div>
+    <div class="dots" id="dots"></div>
+  </div>
+  <div id="view"></div>
+</div>
+
+<script>
+const STORE = "ph111-ammar-v1";
+const T = [
+/* ============================ 1 ============================ */
+{
+ id:"units", num:"1", lec:"Lecture 1", title:"Units & Dimensions",
+ desc:"Base units, dimensions, conversions, sig figs",
+ know:[
+  "7 base SI units: <code>m</code> <code>kg</code> <code>s</code> <code>A</code> <code>K</code> <code>mol</code> <code>cd</code>.",
+  "Dimensions: mass <code>M</code>, length <code>L</code>, time <code>T</code>. Nothing else is a dimension.",
+  "Anything per second has <code>T</code><sup>-1</sup> on the end. Acceleration is <code>T</code><sup>-2</sup>.",
+  "Adding or subtracting: keep the <b>fewest decimal places</b>. Multiplying or dividing: keep the <b>fewest significant figures</b>.",
+  "You cannot add different dimensions. <code>L + L/T</code> is always wrong, no working needed."
+ ],
+ dims:[["velocity","LT⁻¹"],["acceleration","LT⁻²"],["force","MLT⁻²"],["work / energy","ML²T⁻²"],["pressure","ML⁻¹T⁻²"],["momentum","MLT⁻¹"],["density","ML⁻³"]],
+ method:{name:"Checking an equation is dimensionally correct", steps:[
+  "Write the dimensions of every symbol on each side. Numbers like 2 or ½ have no dimension.",
+  "Multiply them out into one <code>M</code> <code>L</code> <code>T</code> string.",
+  "Left side equals right side? Correct. Any difference? Incorrect, done."
+ ]},
+ example:{q:"Show that v² = v₀t + 2as is dimensionally correct.",
+  steps:"LHS   v²      = (L/T)²        = L²T⁻²\nRHS   v₀t     = (L/T)(T)       = L\nRHS   2as     = (L/T²)(L)      = L²T⁻²",
+  ans:"First term gives L, the others give L²T⁻². They do not match, so the equation is not correct."},
+ quiz:[
+  {q:"What are the dimensions of pressure?", opts:["ML⁻¹T⁻²","MLT⁻²","ML²T⁻²","ML⁻³"], a:0,
+   why:"Pressure = force ÷ area = <code>MLT⁻²</code> ÷ <code>L²</code> = <code>ML⁻¹T⁻²</code>."},
+  {q:"Convert 90 km/h to m/s.", num:25, tol:0.2, unit:"m/s",
+   why:"Divide by 3.6. <code>90 ÷ 3.6 = 25 m/s</code>."},
+  {q:"23.2 + 5.174 to the correct number of significant figures.", num:28.4, tol:0.05, unit:"",
+   why:"Adding: keep the fewest <b>decimal places</b>. 23.2 has one, so the answer is <code>28.4</code>, not 28.374."}
+ ]
+},
+/* ============================ 2 ============================ */
+{
+ id:"vectors", num:"2", lec:"Lecture 2", title:"Vectors",
+ desc:"Components, magnitude, direction, dot product",
+ know:[
+  "<b>Scalar</b> = size only: distance, speed, mass, time, temperature, energy.",
+  "<b>Vector</b> = size and direction: displacement, velocity, acceleration, force, momentum.",
+  "Magnitude: <code>|A| = √(Ax² + Ay²)</code>. Direction: <code>θ = tan⁻¹(Ay/Ax)</code> from the +x axis.",
+  "Polar to cartesian: <code>Ax = A cosθ</code>, <code>Ay = A sinθ</code>.",
+  "Dot product: <code>A·B = AxBx + AyBy</code>, and <code>= |A||B|cosθ</code>.",
+  "Angles are always measured from the <b>+x axis</b>. If the question measures from north or south, sin and cos swap."
+ ],
+ method:{name:"Any vector question, in 3 steps", steps:[
+  "Split everything into x and y. <b>cos</b> goes with the axis the angle is measured from, <b>sin</b> goes with the other one.",
+  "Add all the x parts together, then all the y parts together.",
+  "Magnitude <code>√(x²+y²)</code>, direction <code>tan⁻¹(y/x)</code>, then check which quadrant and fix the sign."
+ ]},
+ example:{q:"Write A = 8 ∠ 210° in cartesian form.",
+  steps:"Ax = 8 cos 210 = −6.93\nAy = 8 sin 210 = −4",
+  ans:"A = −6.93 i − 4 j. Both negative, which is the third quadrant."},
+ quiz:[
+  {q:"Which of these is a vector?", opts:["Displacement","Speed","Mass","Temperature"], a:0,
+   why:"Displacement has size <b>and</b> direction. Speed is the scalar version of velocity, so it has size only."},
+  {q:"Find |A| for A = 3i + 4j.", num:5, tol:0.05, unit:"",
+   why:"<code>√(3² + 4²) = √25 = 5</code>."},
+  {q:"A = 2i + 3j and B = −i + 2j. Find A·B.", num:4, tol:0.05, unit:"",
+   why:"Multiply matching parts and add: <code>(2)(−1) + (3)(2) = −2 + 6 = 4</code>."}
+ ]
+},
+/* ============================ 3 ============================ */
+{
+ id:"motion1d", num:"3", lec:"Lecture 3", title:"Motion in 1D",
+ desc:"Velocity, acceleration, kinematics, free fall",
+ know:[
+  "<b>Displacement</b> <code>Δx = xf − xi</code>, can be negative. <b>Distance</b> is the whole path, always positive.",
+  "<code>v<sub>av</sub> = Δx/Δt</code>, speed <code>= d/t</code>, <code>a = Δv/Δt</code>.",
+  "On a position-time graph, slope = velocity. On a velocity-time graph, slope = acceleration.",
+  "Free fall: <code>a = −g = −9.8 m/s²</code> if you take up as positive. At the top of the throw <code>v = 0</code> but <code>a</code> is still −9.8.",
+  "There are only <b>5 symbols</b>: <code>vi</code> <code>vf</code> <code>a</code> <code>t</code> <code>Δx</code>. Every question gives 3 and asks for 1."
+ ],
+ fmls:["vf = vi + a t","Δx = vi t + ½ a t²","vf² = vi² + 2 a Δx","Δx = (vi + vf) t / 2"],
+ method:{name:"Pick the right equation in 10 seconds", steps:[
+  "List the 5 symbols and tick the 3 you were given, plus the 1 you want.",
+  "Choose the equation containing exactly those and <b>leaving out the symbol you do not have</b>.",
+  "Substitute, keep the signs, and check the unit at the end."
+ ]},
+ example:{q:"A jet lands at 63 m/s and stops in 2.0 s. Find a, then the stopping distance.",
+  steps:"Known: vi = 63, vf = 0, t = 2.\nNo Δx, so use:  vf = vi + a t\n0 = 63 + 2a   →   a = −31.5 m/s²\nNow Δx, no vf needed:  Δx = vi t + ½at²\nΔx = 63(2) + ½(−31.5)(4) = 126 − 63",
+  ans:"a = −31.5 m/s² and Δx = 63 m."},
+ quiz:[
+  {q:"A player runs from one end of the court to the other and back. What is the displacement?", opts:["Zero","Double the court length","The court length","Half the court length"], a:0,
+   why:"They finish where they started, so <code>Δx = 0</code>. The <b>distance</b> is double the court, but distance is not displacement."},
+  {q:"A car goes from 0 to 100 km/h in 5.0 s. Find its acceleration.", num:5.56, tol:0.15, unit:"m/s²",
+   why:"Convert first: <code>100 ÷ 3.6 = 27.8 m/s</code>. Then <code>a = 27.8 ÷ 5 = 5.56 m/s²</code>."},
+  {q:"A stone is dropped from rest. How far has it fallen after 3.0 s?", num:44.1, tol:0.5, unit:"m",
+   why:"<code>Δy = vi t + ½at² = 0 + ½(−9.8)(9) = −44.1</code>, so 44.1 m downwards."}
+ ]
+},
+/* ============================ 4 ============================ */
+{
+ id:"projectile", num:"4", lec:"Lecture 5", title:"Projectiles",
+ desc:"Motion in two dimensions under gravity",
+ know:[
+  "Horizontal: <code>ax = 0</code>, so <code>vx</code> never changes.",
+  "Vertical: <code>ay = −g</code>, exactly like free fall.",
+  "Split the launch: <code>vx = v cosθ</code>, <code>vy = v sinθ</code>.",
+  "Range is biggest at <b>45°</b>. Two angles add to 90° and give the same range.",
+  "Falling off a cliff or dropped from a plane means <code>vyi = 0</code>, but <code>vx</code> is whatever the plane was doing."
+ ],
+ fmls:["H = v² sin²θ / 2g","R = v² sin 2θ / g","T (whole flight) = 2v sinθ / g","t to the top = v sinθ / g"],
+ method:{name:"Any projectile, in 3 steps", steps:[
+  "Split the launch into <code>vx = v cosθ</code> and <code>vy = v sinθ</code>.",
+  "Treat x and y as two separate problems. The only thing they share is <b>time</b>.",
+  "x has no acceleration. y has g downwards. Use the R, H, T shortcuts when it lands at the same height."
+ ]},
+ example:{q:"A long jumper leaves at 11 m/s, 20° above the horizontal. Find the range and max height.",
+  steps:"R = v² sin2θ / g = (121)(sin 40) / 9.8 = 77.8 / 9.8\nH = v² sin²θ / 2g = (121)(sin 20)² / 19.6 = 14.15 / 19.6",
+  ans:"R = 7.94 m and H = 0.72 m. Use the shortcuts, no need to find t first."},
+ quiz:[
+  {q:"Which quantity stays constant during a projectile's flight?", opts:["Horizontal velocity","Vertical velocity","Speed","Acceleration direction"], a:0,
+   why:"<code>ax = 0</code>, so <code>vx</code> never changes. <code>vy</code> changes by 9.8 every second."},
+  {q:"A ball is launched at 20 m/s at 30°. Find the total time of flight.", num:2.04, tol:0.08, unit:"s",
+   why:"<code>T = 2v sinθ / g = 2(20)(0.5) / 9.8 = 20 / 9.8 = 2.04 s</code>."},
+  {q:"Same ball, 20 m/s at 30°. Find the maximum height.", num:5.1, tol:0.15, unit:"m",
+   why:"<code>H = v² sin²θ / 2g = (400)(0.25) / 19.6 = 5.10 m</code>."}
+ ]
+},
+/* ============================ 5 ============================ */
+{
+ id:"forces", num:"5", lec:"Lecture 6", title:"Laws of Motion",
+ desc:"Newton's laws, weight, friction, inclines, pulleys",
+ know:[
+  "No net force means at rest <b>or</b> moving at constant velocity. Constant velocity is still zero acceleration.",
+  "<code>ΣF = ma</code>. If the body is in equilibrium, <code>ΣF = 0</code>.",
+  "Mass never changes. <b>Weight does</b>: <code>W = mg</code>.",
+  "Friction: <code>f = μN</code>, and it always points against the motion.",
+  "On an incline: <code>N = mg cosθ</code>, and the pull down the slope is <code>mg sinθ</code>.",
+  "Smooth, slippery, frictionless all mean <code>f = 0</code>."
+ ],
+ method:{name:"Any force problem, in 3 steps", steps:[
+  "Draw the box and every force on it: <code>mg</code> straight down, <code>N</code> out of the surface, <code>f</code> against the motion, <code>T</code> along the rope.",
+  "Put your axes along the motion. Split anything at an angle with cos and sin.",
+  "Along the motion write <code>ΣF = ma</code>. Perpendicular to it write <code>ΣF = 0</code>."
+ ]},
+ example:{q:"A block slides down a frictionless 15° incline from rest, 2 m long. Find a, then the speed at the bottom.",
+  steps:"Down the slope:  mg sinθ = ma   →   a = g sinθ\na = 9.8 sin 15 = 2.54 m/s²\nvf² = vi² + 2aΔx = 0 + 2(2.54)(2)",
+  ans:"a = 2.54 m/s² and vf = 3.19 m/s. The mass cancels, so it never appears."},
+ quiz:[
+  {q:"A car is moving at a constant velocity. What is the net force on it?", opts:["Zero","Equal to its weight","Equal to ma","Pointing forward"], a:0,
+   why:"Constant velocity means acceleration is zero, so <code>ΣF = ma = 0</code>. Newton's first law."},
+  {q:"A 5 kg object has a net force of 20 N. Find its acceleration.", num:4, tol:0.05, unit:"m/s²",
+   why:"<code>a = F/m = 20/5 = 4 m/s²</code>."},
+  {q:"A block slides down a frictionless 30° incline. Find its acceleration.", num:4.9, tol:0.1, unit:"m/s²",
+   why:"<code>a = g sinθ = 9.8 sin 30 = 4.9 m/s²</code>. Mass does not matter."}
+ ]
+}
+];
+
+/* ---------------- state ---------------- */
+let S = {view:"home", topic:0};
+let A = {};
+try{ A = JSON.parse(localStorage.getItem(STORE) || "{}"); }catch(e){ A = {}; }
+function save(){ try{ localStorage.setItem(STORE, JSON.stringify(A)); }catch(e){} }
+function key(t,q){ return t + ":" + q; }
+function topicScore(t){
+  const qz = T[t].quiz; let got = 0, done = 0;
+  qz.forEach((q,i)=>{ const r = A[key(T[t].id,i)]; if(r){ done++; if(r.ok) got++; } });
+  return {got, done, total: qz.length};
+}
+
+/* ---------------- render ---------------- */
+const $ = id => document.getElementById(id);
+const esc = s => s;
+
+function renderHome(){
+  $("barTop").textContent = "C-PH111 · Fall 2026";
+  $("barSub").textContent = "Physics revision";
+  $("back").classList.add("hide");
+  $("dots").innerHTML = "";
+
+  let doneAll = 0, totAll = 0;
+  let cards = T.map((t,i)=>{
+    const sc = topicScore(i);
+    doneAll += sc.got; totAll += sc.total;
+    const st = sc.done === sc.total ? `${sc.got}/${sc.total} ✓` : (sc.done ? `${sc.got}/${sc.total}` : "");
+    return `<button class="card" data-i="${i}">
+      <span class="num">${t.num}</span>
+      <span class="txt"><span class="ttl">${t.title}</span><span class="ds">${t.desc}</span></span>
+      <span class="st ${sc.done===sc.total?'done':''}">${st}</span>
+    </button>`;
+  }).join("");
+
+  $("view").innerHTML = `
+    <div class="eyebrow">Midterm revision · 5 parts</div>
+    <h1>Ammar, learn<br><em>the short way.</em></h1>
+    <p class="lead">Each part is one page: what you must know, one method, one worked example, then 3 questions to prove it. That is the whole thing.</p>
+    <div class="tline"><b>Start here</b><span style="color:var(--soft);font-size:12px">${doneAll}/${totAll} questions correct</span></div>
+    ${cards}
+    <p class="note">C-PH111 Elementary Physics · built from lectures 1, 2, 3, 5 and 6</p>`;
+
+  document.querySelectorAll(".card").forEach(b=>{
+    b.onclick = ()=>{ S.topic = +b.dataset.i; S.view = "topic"; render(); window.scrollTo(0,0); };
+  });
+}
+
+function renderTopic(){
+  const t = T[S.topic];
+  const sc = topicScore(S.topic);
+  $("barTop").textContent = t.lec;
+  $("barSub").textContent = t.title;
+  $("back").classList.remove("hide");
+  $("dots").innerHTML = t.quiz.map((q,i)=>{
+    const r = A[key(t.id,i)];
+    return `<span class="dot ${r && r.ok ? "on" : ""}"></span>`;
+  }).join("");
+
+  const dims = t.dims ? `<div class="sec"><table style="width:100%;border-collapse:collapse;font-family:var(--mono);font-size:13px">
+      ${t.dims.map(([k,v])=>`<tr><td style="padding:5px 0;color:var(--muted)">${k}</td><td style="padding:5px 0;text-align:right;color:var(--teal);font-weight:600">${v}</td></tr>`).join("")}
+    </table></div>` : "";
+
+  const fmls = t.fmls ? `<div class="sec">${t.fmls.map(f=>`<div class="fml"><b>${f}</b></div>`).join("")}</div>` : "";
+
+  $("view").innerHTML = `
+    <div class="lec">${t.lec}</div>
+    <h2>${t.title}</h2>
+
+    <h3>What you must know</h3>
+    <div class="sec"><ul class="know">${t.know.map(k=>`<li>${k}</li>`).join("")}</ul></div>
+    ${dims}
+
+    <h3>The method</h3>
+    <div class="sec">
+      <p class="mname">${t.method.name}</p>
+      <ol class="steps">${t.method.steps.map(s=>`<li>${s}</li>`).join("")}</ol>
+    </div>
+    ${fmls}
+
+    <h3>Worked example</h3>
+    <div class="ex">
+      <p class="q">${t.example.q}</p>
+      <pre class="st">${t.example.steps}</pre>
+      <div class="a">${t.example.ans}</div>
+    </div>
+
+    <h3>Check yourself · ${t.quiz.length} questions</h3>
+    ${t.quiz.map((q,i)=>quizHTML(t,i,q)).join("")}
+
+    ${sc.done === sc.total
+      ? `<div class="donebox"><p>${sc.got}/${sc.total} correct. ${sc.got===sc.total?"That part is done. Move to the next one.":"Go back over the ones you missed, then try again."}</p>
+         <button class="btn ghost sm" id="reset">Reset this part</button></div>`
+      : ``}
+
+    <div class="foot">
+      <button class="btn ghost" id="homeBtn">All parts</button>
+      ${S.topic < T.length-1 ? `<button class="btn" id="nextBtn">Next part →</button>` : ``}
+    </div>`;
+
+  $("back").onclick = ()=>{ S.view="home"; render(); window.scrollTo(0,0); };
+  $("homeBtn").onclick = ()=>{ S.view="home"; render(); window.scrollTo(0,0); };
+  if($("nextBtn")) $("nextBtn").onclick = ()=>{ S.topic++; render(); window.scrollTo(0,0); };
+  if($("reset")) $("reset").onclick = ()=>{
+    t.quiz.forEach((q,i)=> delete A[key(t.id,i)]);
+    save(); render();
+  };
+
+  t.quiz.forEach((q,i)=>{
+    if(q.opts){
+      document.querySelectorAll(`.opt[data-q="${i}"]`).forEach(b=>{
+        b.onclick = ()=> answerMCQ(t,i,+b.dataset.o,b);
+      });
+    } else {
+      const btn = document.querySelector(`.btn[data-num="${i}"]`);
+      if(btn) btn.onclick = ()=> answerNum(t,i);
+      const inp = document.querySelector(`input[data-inp="${i}"]`);
+      if(inp) inp.onkeydown = e=>{ if(e.key==="Enter") answerNum(t,i); };
+    }
+  });
+
+  // restore answered
+  t.quiz.forEach((q,i)=> restore(t,i,q));
+}
+
+function quizHTML(t,i,q){
+  const head = `<div class="qn">Q${i+1}</div><p class="qq">${q.q}</p>`;
+  if(q.opts){
+    const opts = q.opts.map((o,j)=>`<button class="opt" data-q="${i}" data-o="${j}">${o}</button>`).join("");
+    return `<div class="quizb" id="q${i}">${head}<div class="opts">${opts}</div><div id="w${i}"></div></div>`;
+  }
+  return `<div class="quizb" id="q${i}">${head}
+    <div class="numin">
+      <input data-inp="${i}" inputmode="decimal" placeholder="your answer" autocomplete="off">
+      <span class="u">${q.unit||""}</span>
+      <button class="btn sm" data-num="${i}">Check</button>
+    </div>
+    <div id="w${i}"></div></div>`;
+}
+
+function mark(t,i,ok,extra){
+  const k = key(t.id,i);
+  const first = !A[k];
+  if(first){ A[k] = {ok:ok}; save(); }
+  const wrap = $("w"+i);
+  wrap.innerHTML = `<div class="why ${ok?"ok":"no"}">${ok?"<b>Correct.</b> ":"<b>Not quite.</b> "}${extra}</div>`;
+  // dots
+  const t2 = T[S.topic];
+  $("dots").innerHTML = t2.quiz.map((q,j)=>{
+    const r = A[key(t2.id,j)];
+    return `<span class="dot ${r && r.ok ? "on" : ""}"></span>`;
+  }).join("");
+  return first;
+}
+
+function answerMCQ(t,i,j,btn){
+  const q = t.quiz[i];
+  const ok = j === q.a;
+  document.querySelectorAll(`.opt[data-q="${i}"]`).forEach((b,k)=>{
+    b.disabled = true;
+    if(k === q.a) b.classList.add("good");
+    if(k === j && !ok) b.classList.add("bad");
+  });
+  mark(t,i,ok,q.why);
+}
+
+function answerNum(t,i){
+  const q = t.quiz[i];
+  const inp = document.querySelector(`input[data-inp="${i}"]`);
+  const raw = (inp.value||"").trim().replace(",",".");
+  const v = parseFloat(raw);
+  if(isNaN(v)){ inp.focus(); return; }
+  const ok = Math.abs(v - q.num) <= q.tol;
+  inp.disabled = true;
+  const btn = document.querySelector(`.btn[data-num="${i}"]`);
+  if(btn){ btn.disabled = true; btn.textContent = "Done"; }
+  mark(t,i,ok, q.why + ` Answer: <b>${q.num}${q.unit?" "+q.unit:""}</b>.`);
+}
+
+function restore(t,i,q){
+  const r = A[key(t.id,i)];
+  if(!r) return;
+  if(q.opts){
+    document.querySelectorAll(`.opt[data-q="${i}"]`).forEach((b,k)=>{
+      b.disabled = true;
+      if(k === q.a) b.classList.add("good");
+    });
+    $("w"+i).innerHTML = `<div class="why ${r.ok?"ok":"no"}">${r.ok?"<b>Correct.</b> ":"<b>Missed this one.</b> "}${q.why}</div>`;
+  } else {
+    const inp = document.querySelector(`input[data-inp="${i}"]`);
+    if(inp) inp.disabled = true;
+    const btn = document.querySelector(`.btn[data-num="${i}"]`);
+    if(btn){ btn.disabled = true; btn.textContent = "Done"; }
+    $("w"+i).innerHTML = `<div class="why ${r.ok?"ok":"no"}">${r.ok?"<b>Correct.</b> ":"<b>Missed this one.</b> "}${q.why} Answer: <b>${q.num}${q.unit?" "+q.unit:""}</b>.</div>`;
+  }
+}
+
+function render(){
+  if(S.view === "home") renderHome(); else renderTopic();
+}
+render();
+</script>
+</body>
+</html>
